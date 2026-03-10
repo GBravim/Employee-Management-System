@@ -21,4 +21,23 @@ model Employee {
   hireDate  DateTime
   salary    Float
   active    Boolean  @default(true)
+
+  department   Department @relation(fields: [departmentId], references: [id])
+  departmentId Int
+
+  position     Position   @relation(fields: [positionId], references: [id])
+  positionId   Int
+}
+
+model Department {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  employees Employee[]
+}
+
+model Position {
+  id        Int        @id @default(autoincrement())
+  title     String
+  baseSalary Float
+  employees Employee[]
 }
