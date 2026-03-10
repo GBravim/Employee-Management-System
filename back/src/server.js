@@ -5,6 +5,7 @@ const cors = require("cors");
 const employeeRoutes = require("./routes/employee.routes");
 const departmentRoutes = require("./routes/department.routes");
 const positionRoutes = require("./routes/position.routes");
+const userRoutes = require("./routes/user.routes");
 
 const prisma = new PrismaClient();
 const app = express();
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use("/employees", employeeRoutes);
 app.use("/departments", departmentRoutes);
 app.use("/positions", positionRoutes);
+app.use("/users", userRoutes);
 
 app.get("/employees", async (req, res) => {
   const employees = await prisma.employee.findMany();
