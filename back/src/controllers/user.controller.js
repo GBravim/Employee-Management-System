@@ -1,14 +1,17 @@
 const userService = require("../services/user.service")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
+const { createUserSchema } = require("../validations/user.validation")
 
 const SECRET = "descomplica"
 
 exports.register = async (req, res) => {
-  console.log(userService)
+
   try {
 
-    const user = await userService.create(req.body)
+    const data = createUserSchema.parse(req.body)
+
+    const user = await userService.create(data)
 
     res.json(user)
 
@@ -17,6 +20,7 @@ exports.register = async (req, res) => {
     res.status(400).json({ error: error.message })
 
   }
+
 }
 
 exports.login = async (req, res) => {
