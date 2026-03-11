@@ -1,3 +1,4 @@
 #Banco de Dados
-prisma/dev.db
-prisma/dev.db-journal
+#back/prisma/dev.db
+#back/prisma/dev.db-journal
+
