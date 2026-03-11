@@ -38,9 +38,9 @@ router.post("/auth/login", userController.login)
  *     tags: [Users]
  */
 router.get(
-  "/users",
+  "/",
   authMiddleware,
-  roleMiddleware("ADMIN"),
+  roleMiddleware("ADMIN", "MANAGER"),
   userController.listUsers
 )
 

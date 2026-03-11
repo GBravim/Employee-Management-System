@@ -1,13 +1,43 @@
 const { PrismaClient } = require("@prisma/client")
 const prisma = new PrismaClient()
 
-exports.getAll = async () => {
+exports.getAll = async (filters) => {
+
+  const where = {}
+
+  if (filters.name) {
+    where.name = {
+      contains: filters.name,
+      mode: "insensitive"
+    }
+  }
+
+  if (filters.department) {
+    where.department = {
+      name: {
+        contains: filters.department,
+        mode: "insensitive"
+      }
+    }
+  }
+
+  if (filters.position) {
+    where.position = {
+      name: {
+        contains: filters.position,
+        mode: "insensitive"
+      }
+    }
+  }
+
   return prisma.employee.findMany({
+    where,
     include: {
       department: true,
       position: true
     }
   })
+
 }
 
 exports.create = async (data) => {

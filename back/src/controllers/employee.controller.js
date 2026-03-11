@@ -18,7 +18,7 @@ exports.createEmployee = async (req, res) => {
 
 exports.listEmployees = async (req, res) => {
 
-  const employees = await employeeService.getAll()
+  const employees = await employeeService.getAll(req.query)
 
   res.json(employees)
 
