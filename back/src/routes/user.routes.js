@@ -9,36 +9,92 @@ const roleMiddleware = require("../middleware/role.middleware")
  * @swagger
  * tags:
  *   name: Users
- *   description: Gerenciamento de usuários
+ *   description: Gerenciamento de usuários e autenticação
  */
 
 /**
  * @swagger
- * /auth/register:
+ * /users/register:
  *   post:
  *     summary: Registra um novo usuário
  *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - email
+ *               - password
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Admin
+ *               email:
+ *                 type: string
+ *                 example: admin@email.com
+ *               password:
+ *                 type: string
+ *                 example: 12345
+ *               role:
+ *                 type: string
+ *                 example: ADMIN
+ *     responses:
+ *       200:
+ *         description: Usuário criado com sucesso
+ *       400:
+ *         description: Dados inválidos
  */
-router.post("/auth/register", userController.register)
+router.post("/register", userController.register)
 
 /**
  * @swagger
- * /auth/login:
+ * /users/login:
  *   post:
- *     summary: Autentica usuário
+ *     summary: Autentica um usuário e retorna um token JWT
  *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: name@email.com
+ *               password:
+ *                 type: string
+ *                 example: 12345
+ *     responses:
+ *       200:
+ *         description: Login realizado com sucesso
+ *       401:
+ *         description: Credenciais inválidas
  */
-router.post("/auth/login", userController.login)
+router.post("/login", userController.login)
 
 /**
  * @swagger
- * /users:
+ * /users/me:
  *   get:
- *     summary: Dados do usuário autenticado
+ *     summary: Retorna os dados do usuário autenticado
  *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Dados do usuário autenticado
+ *       401:
+ *         description: Token inválido ou ausente
  */
 router.get(
-  "/auth/me",
+  "/me",
   authMiddleware,
   userController.me
 )
@@ -49,6 +105,15 @@ router.get(
  *   get:
  *     summary: Lista todos os usuários
  *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de usuários
+ *       401:
+ *         description: Não autorizado
+ *       403:
+ *         description: Permissão insuficiente
  */
 router.get(
   "/",
@@ -61,11 +126,25 @@ router.get(
  * @swagger
  * /users/email/{email}:
  *   get:
- *     summary: Busca usuário por email
+ *     summary: Busca um usuário pelo email
  *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: email
+ *         required: true
+ *         schema:
+ *           type: string
+ *         example: admin@email.com
+ *     responses:
+ *       200:
+ *         description: Usuário encontrado
+ *       404:
+ *         description: Usuário não encontrado
  */
 router.get(
-  "/users/email/:email",
+  "/email/:email",
   authMiddleware,
   roleMiddleware("ADMIN", "MANAGER"),
   userController.getUserByEmail
@@ -75,11 +154,44 @@ router.get(
  * @swagger
  * /users/{id}:
  *   put:
- *     summary: Atualiza usuário
+ *     summary: Atualiza um usuário existente
  *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         example: 1
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 example: Novo Nome
+ *               email:
+ *                 type: string
+ *                 example: novo@email.com
+ *               password:
+ *                 type: string
+ *                 example: novaSenha123
+ *               role:
+ *                 type: string
+ *                 example: MANAGER
+ *     responses:
+ *       200:
+ *         description: Usuário atualizado
+ *       404:
+ *         description: Usuário não encontrado
  */
 router.put(
-  "/users/:id",
+  "/:id",
   authMiddleware,
   roleMiddleware("ADMIN", "MANAGER"),
   userController.updateUser
@@ -89,11 +201,27 @@ router.put(
  * @swagger
  * /users/{id}:
  *   delete:
- *     summary: Remove usuário
+ *     summary: Remove um usuário
  *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         example: 1
+ *     responses:
+ *       200:
+ *         description: Usuário removido
+ *       404:
+ *         description: Usuário não encontrado
+ *       403:
+ *         description: Permissão insuficiente
  */
 router.delete(
-  "/users/:id",
+  "/:id",
   authMiddleware,
   roleMiddleware("ADMIN"),
   userController.deleteUser
