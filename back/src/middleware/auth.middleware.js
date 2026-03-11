@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken")
 
-const SECRET = "descomplica"
+const SECRET = process.env.JWT_SECRET
 
 module.exports = (req, res, next) => {
 
@@ -22,6 +22,8 @@ module.exports = (req, res, next) => {
 
   } catch {
 
-    return res.status(401).json({ error: "Token inválido" })
+    res.status(401).json({ error: "Token inválido" })
+
   }
+
 }

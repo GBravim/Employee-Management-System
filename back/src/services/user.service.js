@@ -46,6 +46,19 @@ exports.getAll = async () => {
 
 }
 
+exports.getById = async (id) => {
+
+  return prisma.user.findUnique({
+    where: { id: Number(id) },
+    select: {
+      id: true,
+      email: true,
+      role: true
+    }
+  })
+
+}
+
 exports.getByEmail = async (email) => {
 
   return prisma.user.findUnique({

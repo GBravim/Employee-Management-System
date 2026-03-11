@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const { createUserSchema } = require("../validations/user.validation")
 
-const SECRET = "descomplica"
+const SECRET = process.env.JWT_SECRET
 
 exports.register = async (req, res) => {
 
@@ -120,5 +120,13 @@ exports.deleteUser = async (req, res) => {
     res.status(400).json({ error: error.message })
 
   }
+
+}
+
+exports.me = async (req, res) => {
+
+  const user = await userService.getById(req.user.userId)
+
+  res.json(user)
 
 }

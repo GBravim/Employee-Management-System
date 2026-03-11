@@ -34,6 +34,19 @@ router.post("/auth/login", userController.login)
  * @swagger
  * /users:
  *   get:
+ *     summary: Dados do usuário autenticado
+ *     tags: [Users]
+ */
+router.get(
+  "/auth/me",
+  authMiddleware,
+  userController.me
+)
+
+/**
+ * @swagger
+ * /users:
+ *   get:
  *     summary: Lista todos os usuários
  *     tags: [Users]
  */
