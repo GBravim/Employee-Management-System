@@ -32,7 +32,6 @@ model Department {
 model Position {
   id        Int        @id @default(autoincrement())
   title     String
-  baseSalary Float
   employees Employee[]
 }
 

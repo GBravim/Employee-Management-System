@@ -12,7 +12,8 @@ const form = ref({
   cpf: "",
   departmentId: "",
   positionId: "",
-  salary: 0
+  salary: null,
+  active: true
 })
 
 const editingId = ref(null)
@@ -71,7 +72,8 @@ function editEmployee(employee) {
     cpf: employee.cpf,
     departmentId: employee.departmentId,
     positionId: employee.positionId,
-    salary: employee.salary
+    salary: employee.salary,
+    active: employee.active
   }
   showForm.value = true
 }
@@ -92,7 +94,8 @@ function resetForm() {
     cpf: "",
     departmentId: "",
     positionId: "",
-    salary: 0
+    salary: 0,
+    active: true
   }
   showForm.value = false
 }
@@ -141,6 +144,11 @@ onMounted(() => {
   <div class="form-row">
     <input v-model="form.fullName" placeholder="Nome" />
     <input v-model="form.email" placeholder="Email" />
+    <div class="form-row">
+      <label>
+        <input type="checkbox" v-model="form.active" /> Funcionário ativo
+      </label>
+    </div>
   </div>
 
   <div class="form-row">
@@ -180,6 +188,7 @@ onMounted(() => {
       <th>Departamento</th>
       <th>Cargo</th>
       <th>Salário</th>
+      <th>Status</th>
       <th>Ações</th>
     </tr>
   </thead>
@@ -191,6 +200,7 @@ onMounted(() => {
       <td>{{ employee.department?.name || employee.departmentId }}</td>
       <td>{{ employee.position?.title || employee.positionId }}</td>
       <td>{{ employee.salary }}</td>
+      <td>{{ employee.active ? "Ativo" : "Inativo" }}</td>
       <td>
         <button @click="editEmployee(employee)">Editar</button>
         <button @click="deleteEmployee(employee.id)">Deletar</button>

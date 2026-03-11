@@ -62,7 +62,7 @@ onMounted(loadPositions)
 
 <!-- Formulário de cadastro/edição -->
 <div v-if="showForm" class="form">
-  <input v-model="form.name" placeholder="Nome do cargo" />
+  <input v-model="form.title" placeholder="Nome do cargo" />
 
   <div class="form-actions">
     <button @click="savePosition">

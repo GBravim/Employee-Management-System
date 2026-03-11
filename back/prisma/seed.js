@@ -26,9 +26,9 @@ async function main() {
 
   await prisma.position.createMany({
     data: [
-      { name: "Gerente" },
-      { name: "Analista" },
-      { name: "Estagiário" }
+      { title: "Gerente" },
+      { title: "Analista" },
+      { title: "Estagiário" }
     ]
   })
 
