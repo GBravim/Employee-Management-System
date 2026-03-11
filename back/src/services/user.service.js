@@ -38,6 +38,7 @@ exports.getAll = async () => {
 
   return prisma.user.findMany({
     select: {
+      name: true,
       id: true,
       email: true,
       role: true
@@ -51,6 +52,7 @@ exports.getById = async (id) => {
   return prisma.user.findUnique({
     where: { id: Number(id) },
     select: {
+      name: true,
       id: true,
       email: true,
       role: true
@@ -64,6 +66,7 @@ exports.getByEmail = async (email) => {
   return prisma.user.findUnique({
     where: { email },
     select: {
+      name: true,
       id: true,
       email: true,
       role: true
