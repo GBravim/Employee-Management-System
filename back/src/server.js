@@ -6,6 +6,8 @@ const employeeRoutes = require("./routes/employee.routes");
 const departmentRoutes = require("./routes/department.routes");
 const positionRoutes = require("./routes/position.routes");
 const userRoutes = require("./routes/user.routes");
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./docs/swagger");
 
 const prisma = new PrismaClient();
 const app = express();
@@ -17,6 +19,7 @@ app.use("/employees", employeeRoutes);
 app.use("/departments", departmentRoutes);
 app.use("/positions", positionRoutes);
 app.use("/users", userRoutes);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get("/employees", async (req, res) => {
   const employees = await prisma.employee.findMany();

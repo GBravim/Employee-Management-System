@@ -15,3 +15,31 @@ exports.create = async (data) => {
     data
   })
 }
+
+exports.getByName = async (name) => {
+  return prisma.employee.findMany({
+    where: {
+      name: {
+        contains: name,
+        mode: "insensitive"
+      }
+    },
+    include: {
+      department: true,
+      position: true
+    }
+  })
+}
+
+exports.update = async (id, data) => {
+  return prisma.employee.update({
+    where: { id: Number(id) },
+    data
+  })
+}
+
+exports.delete = async (id) => {
+  return prisma.employee.delete({
+    where: { id: Number(id) }
+  })
+}

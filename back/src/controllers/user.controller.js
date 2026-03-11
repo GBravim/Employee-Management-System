@@ -56,10 +56,69 @@ exports.login = async (req, res) => {
   }
 }
 
-exports.list = async (req, res) => {
+exports.listUsers = async (req, res) => {
 
   const users = await userService.getAll()
 
   res.json(users)
+
+}
+
+exports.getUserByEmail = async (req, res) => {
+
+  try {
+
+    const user = await userService.getByEmail(req.params.email)
+
+    if (!user) {
+      return res.status(404).json({
+        error: "Usuário não encontrado"
+      })
+    }
+
+    res.json(user)
+
+  } catch (error) {
+
+    res.status(500).json({ error: error.message })
+
+  }
+
+}
+
+exports.updateUser = async (req, res) => {
+
+  try {
+
+    const user = await userService.update(
+      req.params.id,
+      req.body
+    )
+
+    res.json(user)
+
+  } catch (error) {
+
+    res.status(400).json({ error: error.message })
+
+  }
+
+}
+
+exports.deleteUser = async (req, res) => {
+
+  try {
+
+    await userService.delete(req.params.id)
+
+    res.json({
+      message: "Usuário removido com sucesso"
+    })
+
+  } catch (error) {
+
+    res.status(400).json({ error: error.message })
+
+  }
 
 }
